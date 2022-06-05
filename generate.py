@@ -116,15 +116,11 @@ class CrosswordCreator():
         """
 
         overlaps = self.crossword.overlaps
-        print(overlaps)
 
         changes_made = False
         if overlaps[(x, y)] != None:
-            print(f"x matching letter: {overlaps[(x, y)][0]}")
-            print(f"y matching letter: {overlaps[(x, y)][0]}")
             x_matching_letter = overlaps[(x, y)][0]
             y_matching_letter = overlaps[(x, y)][1]
-
 
             matches = []
 
@@ -138,8 +134,6 @@ class CrosswordCreator():
                 if val not in matches:
                     self.domains[x].remove(val)
                     changes_made = True
-
-            print(f"changes made: {changes_made}")
 
         return changes_made
         
@@ -159,30 +153,23 @@ class CrosswordCreator():
         # domain of x might no longer be arc consistent with some other variable.
         # Hence, this function is required
 
-        print(f"ARCS: {arcs}")
 
-        queue = self.crossword.overlaps.copy()
-
-        while len(queue) != 0:
-            for val in queue:
-                (x, y) = (val[0], val[1])
-                if self.revise(x, y):
-                    if len(self.domains[x]) == 0:
-                        return False
-                    for neighbor in self.crossword.overlaps:
-                        if x in neighbor and y not in neighbor:
-                            # queue.add (neighbor, x)
-                            self.domains[x].add()
-
-
-        
         if arcs == None:
-            arcs = {}
+            arcs = []
+            for val in self.crossword.overlaps:
+                arcs.append(val)
             
-            for arc in self.crossword.overlaps:
-                if self.crossword.overlaps[arc] != None:
-                    arcs.append
-                    print(f"{arc}: {self.crossword.overlaps[arc]}")
+        print(arcs)
+
+        while len(arcs) != 0:
+            val = arcs[0] # take first element of queue (enqueue)
+            (x, y) = (val[0], val[1])
+            if self.revise(x, y):
+                if len(self.domains[x]) == 0:
+                    return False
+                for neighbor in arcs:
+                    if x in neighbor and y not in neighbor:
+                        arcs.append(neighbor, x)
         
 
     def assignment_complete(self, assignment):
